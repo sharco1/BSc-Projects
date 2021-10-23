@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fa">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>project</title>
+        <link href="css/styles.css" rel="stylesheet" />
+
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            #map {
+                height: 500px;
+                width: 100%;
+            }
+            #mapid{ height: 100% }
+        </style>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+              integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+              crossorigin=""/>
+    </head>
+    <body class="sb-nav-full" style="background-color:DarkSeaGreen;">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand" href="index.html"> پروژه درس مهندسی نرم افزار</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4">استفاده از API ها  :</h1>
+                 
+                       
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header" ><i class="fas fa-chart-area mr-1" ></i>تقویم فارسی</div>
+                                    <div class="card-body">
+                                        <div class="col-md-12 col-sm-6 col-xs-12">
+                                            <div class="panel panel-default sidePanel">
+                                                <div class="panel-heading">
+                                                    <i class="fa fa-calendar"></i>
+                                                    <p>جستجو در تقویم دلخواه</p>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div id="calSearch">
+                                                        <div class="form-group">
+                                                            <span class="input-group-addon" id="sizing-addon1">روز *</span>
+                                                            <input type="number" name="day" class="form-control" aria-describedby="sizing-addon1">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <span class="input-group-addon" id="sizing-addon2">ماه *</span>
+                                                            <input type="number" name="month" class="form-control" aria-describedby="sizing-addon2">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <span class="input-group-addon" id="sizing-addon3">سال </span>
+                                                            <input type="number" name="year" class="form-control" aria-describedby="sizing-addon3">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <span class="input-group-addon" id="sizing-addon3">تقویم</span>
+                                                            <select name="type" class="form-control">
+                                                                <option value="sh" selected="selected">هجری شمسی</option>
+                                                                <option value="ic">هجری قمری</option>
+                                                                <option value="wc">میلادی</option>
+                                                            </select>
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary" onclick="SearchForEvents()">جستجو  <i class="fa fa-spinner fa-pulse fa-fw hidden"></i></button>
+                                                        <br>
+                                                    </div>
+                                                    <div id="serachResult">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6" >
+                                <div class="card mb-4">
+                                    <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>وضعیت آب و هوا</div>
+                                    <div class="card-body">
+
+                                        <h5 class="card-title">جست و جو برای آب و هوا</h5>
+                                        <p class="card-text">id شهر مورد نظر خود را وارد کنید </p>
+                                        <form action="index.php "method="get">
+                                            <input type="text" class="form-control" id="inputEmail3" placeholder="id" type="submit" name="id">
+                                            <button type="submit" class="btn btn-primary m-2">جستجو</button>
+
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                                <p align="right"> برای دریافت id شهر ها به <a href="http://bulk.openweathermap.org/sample/city.list.json.gz">اینجا</a> مراجعه کنید.</p>
+                            </div>
+                        </div>
+						
+						<div class="row">
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>نقشه گوگل مپ</div>
+                                    <div class="card-body">
+
+                                        <div id = "map"></div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>واژه یاب</div>
+                                    <div class="card-body">
+
+                                        <div id="vajeSearch">
+                                            <div class="form-group">
+                                                <span class="input-group-addon">واژه</span>
+                                                <input id="vajeVal" type="text"  class="form-control">
+                                            </div>
+                                            <button type="button" class="btn btn-primary" onclick="vajeYab()">جستجو  <i class="fa fa-spinner fa-pulse fa-fw hidden"></i></button>
+                                            <br>
+                                        </div>
+                                        <div id="vajeResult">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>نقشه مپ</div>
+                                    <div class="card-body">
+
+                                        <div id = "mapid" style="height:580px;"></div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">تنظیم شده توسط : @شهرزاد میرزایی ، @فرناز طالبی ، @ثنا کشگولی</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+
+        <script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
+
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+                integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+                crossorigin=""></script>
+
+
+        <script>
+
+            console.log("تنظیم شده توسط : @شهرزاد میرزایی ، @فرناز طالبی ، @ثنا کشگولی");
+
+            var mapOptions = {
+                center: [35.702570, 51.351176],
+                zoom: 15
+            }
+
+            // Creating a map object
+            var map = new L.map('mapid', mapOptions);
+
+            // Creating a Layer object
+            var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+            // Adding layer to the map
+            map.addLayer(layer);
+
+            var marker = L.marker([35.702570, 51.351176]);
+
+            // Adding marker to the map
+            marker.addTo(map);
+
+
+            function initMap() {
+                var location = {lat: 35.702570, lng: 51.351176};
+                var map = new google.maps.Map(document.getElementById("map"),{
+                    zoom: 16,
+                    center: location
+                } );
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: map
+                });
+
+            }
+
+            function SearchForEvents() {
+                var n = $("input[name=day]").val(),
+                    t = $("input[name=month]").val(),
+                    i = $("input[name=year]").val(),
+                    r = $("select[name=type] option:selected").val();
+                $("#calSearch button").addClass("disabled");
+                $("#calSearch button i").removeClass("hidden");
+                $("#serachResult").empty();
+                $.ajax({
+                    url: "https://farsicalendar.com/api/" + r + "/" + n + "/" + t + "/" + i,
+                    data: {
+                        limit: 5
+                    },
+                    type: "GET",
+                    success: function(n) {
+                        if (0 == n.values.length) {
+                            var t = document.createElement("div");
+                            t.setAttribute("class", "alert alert-warning");
+                            t.innerHTML = "موردی یافت نشد";
+                            $("#serachResult").append(t);
+                            $(t).slideDown("fast")
+                        }
+                        $.each(n.values, function(n, t) {
+                            var i = document.createElement("div");
+                            i.setAttribute("class", "alert alert-success");
+                            i.innerHTML = t.occasion;
+                            $("#serachResult").append(i);
+                            $(i).slideDown("fast")
+                        });
+                        $("#calSearch button").removeClass("disabled");
+                        $("#calSearch button i").addClass("hidden")
+                    },
+                    error: function() {
+                        var n = document.createElement("div");
+                        n.setAttribute("class", "alert alert-danger");
+                        n.innerHTML = "خطا !!!. پارامترهای وارد شده صحیح نیست";
+                        $("#serachResult").append(n);
+                        $(n).slideDown("fast");
+                        $("#calSearch button").removeClass("disabled");
+                        $("#calSearch button i").addClass("hidden")
+                    }
+                })
+            }
+
+
+
+
+            function vajeYab() {
+                $("#vajeResult").empty();
+                $.ajax({
+                    url: "http://api.vajehyab.com/v3/search",
+                    type: "GET",
+                    data: {
+                        "token": "72959.pVPgl5oXaSmnWspTZ4wzhZXFDtBXj4cJ01Zl7oih",
+                        "q": $("#vajeVal").val(),
+                        "type": "exact",
+                        "filter": "dehkhoda,moein,amid",
+                    },
+                })
+                    .done(function(data, textStatus, jqXHR) {
+                        var jsonObj = JSON.parse(data);
+                        $.each(jsonObj.data.results, function(n, t) {
+                            var i = document.createElement("div");
+                            i.setAttribute("class", "alert alert-success");
+                            i.innerHTML = t.source+" : "+t.text;
+                            $("#vajeResult").append(i);
+                            $(i).slideDown("fast")
+                        });
+                    })
+                    .fail(function(jqXHR, textStatus, errorThrown) {
+                        console.log("HTTP Request Failed");
+                    })
+                    .always(function() {
+
+                    });
+            }
+
+        </script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_3RVhZ6J5UPh9uSFjrwHndM7xlOg8qAk &callback=initMap" async defer></script>
+
+
+    </body>
+
+
+</html>

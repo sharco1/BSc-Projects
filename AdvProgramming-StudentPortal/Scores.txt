@@ -1,0 +1,4 @@
+13 145 quiz 10
+14 145 homework 50
+17 145 project 70
+13 125 quiz 50
